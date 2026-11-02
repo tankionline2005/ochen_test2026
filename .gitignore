@@ -1,0 +1,14 @@
+# Source materials from the assignment (Figma dumps, task text, third-party references) stay local
+/Библиотека компонентов/
+/Примеры композиций/
+/Задание/
+/Референс-загрузки/
+
+node_modules/
+dist/
+web/src/library/
+__pycache__/
+*.pyc
+.venv/
+.env
+.DS_Store

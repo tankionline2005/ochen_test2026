@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- viewport-fit=cover lets the layout use the iPhone notch area via env(safe-area-inset-*) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script>
+      // iOS zooms the page into a focused field whose font is under 16px and never zooms back; maximum-scale stops
+      // that (pinch-zoom still works on iOS). Only there: Android never zooms so, and would lose pinch-zoom.
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+        document.querySelector('meta[name=viewport]').content += ', maximum-scale=1'
+      }
+    </script>
+    <meta name="theme-color" content="#000000" />
+    <script>
+      // the theme before the page draws, so nothing flashes (src/lib/theme.ts keeps it in sync).
+      // DEFAULT_THEME mirrors src/config.ts: 'dark' | 'light' | 'system'
+      ;(function () {
+        var DEFAULT_THEME = 'system'
+        var theme = null
+        try {
+          theme = localStorage.getItem('theme')
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = DEFAULT_THEME === 'system'
+            ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : DEFAULT_THEME
+        }
+        document.documentElement.dataset.theme = theme
+        if (theme === 'light') document.querySelector('meta[name=theme-color]').content = '#f2f2f7'
+      })()
+    </script>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Конструктор иллюстраций" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Конструктор иллюстраций</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
