@@ -146,8 +146,8 @@ export function Editor({ onOpenPalettes }: { onOpenPalettes: () => void }) {
           {toolbar}
           <Canvas bodies={bodies} />
           <div className="stage-hint">
-            Перетаскивайте объекты, крутите за кружок. Delete — удалить, Ctrl+D — копия, [ ] — слой, стрелки — сдвиг, Ctrl+Z —
-            отмена.
+            Перетаскивайте объекты, крутите за кружок. Delete — удалить, Ctrl+D — копировать, [ ] — перемещение слоя (вниз или
+            вверх), стрелки — сдвиг, Ctrl+Z — отмена.
           </div>
         </section>
         <aside className="editor-col right">
