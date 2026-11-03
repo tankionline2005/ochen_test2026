@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion'
-import { Home, List, Settings, type LucideIcon } from 'lucide-react'
+import { Boxes, Info, Palette, Wand2, type LucideIcon } from 'lucide-react'
 
-/** Root sections. Edit this list: the tab bar, the sidebar and the 1–N hotkeys follow it. */
-export type Tab = 'home' | 'items' | 'settings'
+/** Root sections. The tab bar (phone), the top bar (desktop) and the 1–N hotkeys follow this list. */
+export type Tab = 'editor' | 'library' | 'palettes' | 'about'
 
 export const TABS: { id: Tab; label: string; icon: LucideIcon }[] = [
-  { id: 'home', label: 'Home', icon: Home },
-  { id: 'items', label: 'Items', icon: List },
-  { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'editor', label: 'Конструктор', icon: Wand2 },
+  { id: 'library', label: 'Библиотека', icon: Boxes },
+  { id: 'palettes', label: 'Палитры', icon: Palette },
+  { id: 'about', label: 'О проекте', icon: Info },
 ]
 
 interface Props {

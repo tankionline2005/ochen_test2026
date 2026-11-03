@@ -5,6 +5,7 @@ import { startFreezeGuard } from './lib/freezeGuard'
 import { watchKeyboard } from './lib/keyboard'
 import './lib/theme'
 import './styles.css'
+import './app.css'
 
 startFreezeGuard()
 watchKeyboard()

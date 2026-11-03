@@ -1,60 +1,56 @@
-import { Hand, Inbox, ListFilter, RefreshCw, SlidersHorizontal, Sparkles } from 'lucide-react'
+import { Boxes, Hand, Palette, Sparkles, SwatchBook, Wand2 } from 'lucide-react'
 import type { IntroSection } from '../components/Intro'
 
-/**
- * Each section's welcome cards (components/Intro.tsx): they open by themselves on the first visit (useFirstVisit)
- * and again from the «?» by the title (Page onHelp). Two or three cards, each one idea in a short title and two
- * sentences. With roles, build this per person so a card never names a button they don't have.
- */
+/** Each section's welcome cards: open by themselves on the first visit, again from the «?» by the title. */
 export const INTROS: Record<string, IntroSection> = {
-  home: {
-    title: 'Home',
+  editor: {
+    title: 'Конструктор',
     slides: [
       {
         icon: Sparkles,
-        color: 'var(--accent)',
-        title: 'Everything new, in one feed',
-        text: 'Cards come grouped by day, newest first. The switch under the title narrows them to today or this week.',
-      },
-      {
-        icon: RefreshCw,
-        color: 'var(--green)',
-        title: 'Always fresh',
-        text: 'Pull the page down to refresh — or press the round arrow at the top on a computer.',
-      },
-    ],
-  },
-  items: {
-    title: 'Items',
-    slides: [
-      {
-        icon: Inbox,
         color: 'var(--indigo)',
-        title: 'Your collection',
-        text: 'Add items with the plus at the top. Tap one to open its card with the numbers and details.',
+        title: 'Опишите смысл',
+        text: 'Напишите метафору или заголовок — ИИ подберёт подходящие объекты, а раскладка соберёт из них кадр, как это делают дизайнеры.',
+      },
+      {
+        icon: Wand2,
+        color: 'var(--accent)',
+        title: 'Или назовите объекты',
+        text: 'Режим «По названиям»: «книга, телефон, лампа фоном». Объекты не генерируются — только копируются из исходной библиотеки.',
       },
       {
         icon: Hand,
         color: 'var(--orange)',
-        title: 'Actions at hand',
-        text: 'Swipe an item left to pause or delete it; on a computer the buttons appear when you hover.',
-      },
-      {
-        icon: ListFilter,
-        color: 'var(--accent)',
-        title: 'Find anything',
-        text: 'Search by name, and filter by status with the chips under the search field.',
+        title: 'Доведите руками',
+        text: 'Двигайте объекты, поворачивайте, меняйте слои и роль, пробуйте другой вариант раскладки. Готовое скачивается в SVG.',
       },
     ],
   },
-  settings: {
-    title: 'Settings',
+  library: {
+    title: 'Библиотека',
     slides: [
       {
-        icon: SlidersHorizontal,
-        color: 'var(--text-2)',
-        title: 'Saved as you go',
-        text: 'Every switch and value is saved the moment you change it — there is no Save button to forget.',
+        icon: Boxes,
+        color: 'var(--green)',
+        title: '10 предметов, 40 версий',
+        text: 'Каждый предмет есть в крупном и мелком наборе, главным (цветным) и фоновым (монохромным). Нажмите «Главный» или «Фоновый», чтобы добавить его на холст.',
+      },
+    ],
+  },
+  palettes: {
+    title: 'Палитры',
+    slides: [
+      {
+        icon: Palette,
+        color: 'var(--red)',
+        title: 'Перекраска одним нажатием',
+        text: 'Выберите схему — вся композиция перекрасится сразу: цвета фона остаются фоном, цвета объектов — объектами.',
+      },
+      {
+        icon: SwatchBook,
+        color: 'var(--indigo)',
+        title: 'Своя палитра',
+        text: 'Вставьте hex-коды или JSON, загрузите файл или возьмите цвета с картинки. Сервис проверит правила схемы и покажет превью.',
       },
     ],
   },

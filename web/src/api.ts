@@ -48,6 +48,55 @@ export async function request<T>(method: string, path: string, body?: unknown): 
   return (res.status === 204 ? undefined : await res.json()) as T
 }
 
-export const api = {
-  // example: items: () => request<Item[]>('GET', '/api/items'),
+/** What the server streams while the model works on a metaphor (server/app.py). */
+export type ComposeEvent =
+  | { type: 'stage'; stage: 'queued' | 'sent' | 'thinking' | 'answer'; text?: string }
+  | { type: 'thinking'; text: string }
+  | { type: 'result'; picks: { id: string; state: 'main' | 'bg' }[]; title?: string; reason?: string; model?: string; seconds?: number }
+  | { type: 'error'; detail: string }
+
+/**
+ * POST /api/compose and read the server-sent events as they come (EventSource can't POST). Resolves when the stream
+ * ends; `onEvent` gets every event on the way.
+ */
+export async function composeStream(
+  body: { prompt: string; mode: 'meaning' | 'names' },
+  onEvent: (e: ComposeEvent) => void,
+  signal: AbortSignal,
+): Promise<void> {
+  const res = await fetch('/api/compose', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
+    body: JSON.stringify(body),
+    signal,
+  })
+  if (!res.ok || !res.body) {
+    let message = `Сервер ответил ${res.status}`
+    try {
+      const data = await res.json()
+      if (typeof data.detail === 'string') message = data.detail
+    } catch {
+      /* not json */
+    }
+    throw new ApiError(res.status, message)
+  }
+  const reader = res.body.getReader()
+  const decoder = new TextDecoder()
+  let buf = ''
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    buf += decoder.decode(value, { stream: true })
+    let cut
+    while ((cut = buf.indexOf('\n\n')) >= 0) {
+      const chunk = buf.slice(0, cut)
+      buf = buf.slice(cut + 2)
+      const data = chunk
+        .split('\n')
+        .filter((l) => l.startsWith('data:'))
+        .map((l) => l.slice(5).trimStart())
+        .join('\n')
+      if (data) onEvent(JSON.parse(data) as ComposeEvent)
+    }
+  }
 }

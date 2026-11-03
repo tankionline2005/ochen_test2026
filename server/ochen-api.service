@@ -1,0 +1,20 @@
+[Unit]
+Description=Ochen illustrations API (FastAPI)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=ochen
+Group=ochen
+WorkingDirectory=/opt/ochen/server
+EnvironmentFile=/opt/ochen/.env
+ExecStart=/opt/ochen/venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000 --proxy-headers --no-server-header
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
