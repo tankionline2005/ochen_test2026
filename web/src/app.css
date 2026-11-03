@@ -55,6 +55,17 @@
   white-space: nowrap;
 }
 
+.wordmark {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+
+/* the wordmark is black: white on the dark theme */
+:root[data-theme='dark'] .wordmark {
+  filter: invert(1);
+}
+
 .topbar-nav {
   display: flex;
   gap: 4px;
@@ -404,12 +415,69 @@ textarea.field.prompt-field {
   font-size: 16px;
 }
 
-.prompt-examples {
+.scroll-row {
+  position: relative;
+}
+
+.scroll-row-track {
   display: flex;
   gap: 6px;
   overflow-x: auto;
-  padding: 10px 0;
   scrollbar-width: none;
+}
+
+.scroll-row-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* with a mouse: the edges fade where there is more to see, and an arrow sits there */
+.scroll-row.mouse.at-left .scroll-row-track {
+  mask-image: linear-gradient(to right, transparent, #000 44px);
+}
+
+.scroll-row.mouse.at-right .scroll-row-track {
+  mask-image: linear-gradient(to left, transparent, #000 44px);
+}
+
+.scroll-row.mouse.at-left.at-right .scroll-row-track {
+  mask-image: linear-gradient(to right, transparent, #000 44px, #000 calc(100% - 44px), transparent);
+}
+
+.scroll-row.mouse .scroll-row-track {
+  cursor: grab;
+  user-select: none;
+}
+
+.scroll-row-arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+
+.scroll-row-arrow.left {
+  left: 0;
+}
+
+.scroll-row-arrow.right {
+  right: 0;
+}
+
+.scroll-row-arrow:hover {
+  color: var(--accent);
+}
+
+.prompt-examples {
+  padding: 10px 0;
 }
 
 .example-chip {
@@ -934,6 +1002,49 @@ textarea.field.prompt-field {
   padding: 8px 32px 28px;
 }
 
+.about-hero-pic {
+  border-radius: 26px;
+  box-shadow: 0 6px 24px rgba(120, 100, 215, 0.35);
+  margin-bottom: 6px;
+}
+
+.about-stats {
+  margin-top: 14px;
+  width: min(100%, 560px);
+}
+
+.about-stats .hero-stat-label {
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.app.wide .about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 4px;
+}
+
+.step-cell {
+  align-items: flex-start;
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
+.step-title {
+  font-weight: 600;
+}
+
+.step-text {
+  margin-top: 2px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--text-2);
+}
+
+.cell-sub.wrap {
+  white-space: normal;
+}
+
 .about-hero-title {
   font-size: 22px;
   font-weight: 700;
@@ -1009,11 +1120,24 @@ textarea.field.prompt-field {
   position: absolute;
   inset: 0;
   margin: auto;
-  height: fit-content;
   text-align: center;
   color: #fff;
   text-shadow: 0 1px 14px rgba(0, 0, 0, 0.35), 0 0 2px rgba(0, 0, 0, 0.2);
   pointer-events: none;
+}
+
+/* the status and the model's thoughts are two fixed boxes: however many lines the thoughts take, the status
+   stays put. The status sits just above the centre, its last line on the same spot; the thoughts start below. */
+.composing-title-box {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(50% + 4px);
+  height: 2.4em;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-size: 24px;
 }
 
 .composing-title {
@@ -1024,11 +1148,14 @@ textarea.field.prompt-field {
 }
 
 .composing-live {
-  margin-top: 8px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% + 10px);
+  height: calc(3 * 1.35em);
   font-size: 14px;
   line-height: 1.35;
   opacity: 0.92;
-  min-height: 38px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -1126,4 +1253,9 @@ textarea.field.prompt-field {
   .composing-step {
     font-size: 13px;
   }
+}
+
+/* link rows look like the other rows; the arrow says they lead out */
+a.cell {
+  color: var(--text);
 }

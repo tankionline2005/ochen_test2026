@@ -19,12 +19,9 @@ import {
   PromptPanel,
   QuickLibrary,
   SceneSettings,
-  type SizeMode,
   useBodies,
-  useSizeMode,
 } from '../editor/parts'
-import { objectById } from '../engine/library'
-import { suggestSize } from '../engine/layout'
+import { objectById, type Size } from '../engine/library'
 import { FORMATS } from '../engine/scene'
 import { openIntro, useFirstVisit } from '../lib/intros'
 import { useEditor } from '../state/editor'
@@ -44,7 +41,6 @@ export function Editor({ onOpenPalettes }: { onOpenPalettes: () => void }) {
   const [busy, setBusy] = useState(false)
   const [failure, setFailure] = useState<ErrorInfo | null>(null)
   const [note, setNote] = useStoredJson<AiNote | null>('aiNote', null)
-  const [sizeMode, setSizeMode] = useSizeMode()
   const [layersOpen, setLayersOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   useFirstVisit('editor')
@@ -52,7 +48,7 @@ export function Editor({ onOpenPalettes }: { onOpenPalettes: () => void }) {
   const run = async (mode: 'meaning' | 'names', text: string) => {
     setBusy(true)
     try {
-      const res = await compose({ mode, text, scene, size: sizeMode })
+      const res = await compose({ mode, text, scene, size: scene.size })
       if (!res) return
       ed.setScene(res.scene)
       const o = res.outcome
@@ -85,10 +81,7 @@ export function Editor({ onOpenPalettes }: { onOpenPalettes: () => void }) {
     ed.setScene({ ...next, items: await relayout(next) })
   }
 
-  const changeSize = async (mode: SizeMode) => {
-    setSizeMode(mode)
-    const picks = scene.items.map((it) => ({ id: it.id, state: it.state }))
-    const size = mode === 'auto' ? (picks.length ? suggestSize(picks, scene.format) : scene.size) : mode
+  const changeSize = async (size: Size) => {
     if (size === scene.size) return
     if (!scene.items.length) return ed.patch({ size })
     ed.setScene({ ...scene, size, items: await relayout({ ...scene, size }, size) })

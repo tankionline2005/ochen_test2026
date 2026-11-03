@@ -100,7 +100,7 @@ function Shell() {
           ) : tab === 'palettes' ? (
             <Palettes />
           ) : tab === 'about' ? (
-            <About />
+            <About onOpenEditor={() => go('editor')} />
           ) : (
             <Editor onOpenPalettes={() => go('palettes')} />
           )}

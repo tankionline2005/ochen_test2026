@@ -54,19 +54,21 @@ export function ComposingOverlay() {
                 transition={spring}
               >
                 <LiquidSphere size={size} />
-                <div className="composing-status" style={{ width: size * 0.78 }}>
-                  <AnimatePresence mode="wait" initial={false}>
-                    <motion.div
-                      key={s.status}
-                      className="composing-title"
-                      initial={{ opacity: 0, y: 10, filter: 'blur(6px)' }}
-                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                      exit={{ opacity: 0, y: -10, filter: 'blur(6px)' }}
-                      transition={{ duration: 0.35 }}
-                    >
-                      {s.status}
-                    </motion.div>
-                  </AnimatePresence>
+                <div className="composing-status" style={{ width: size * 0.78, height: size }}>
+                  <div className="composing-title-box">
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.div
+                        key={s.status}
+                        className="composing-title"
+                        initial={{ opacity: 0, y: 10, filter: 'blur(6px)' }}
+                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                        exit={{ opacity: 0, y: -10, filter: 'blur(6px)' }}
+                        transition={{ duration: 0.35 }}
+                      >
+                        {s.status}
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
                   <div className="composing-live">{s.live}</div>
                 </div>
               </motion.div>

@@ -13,8 +13,9 @@ const PALETTES: [string, string, string, string][] = [
   ['#C6FF3D', '#2BE0A0', '#00B8FF', '#FFE53B'], // Lime Soda
 ]
 
-const HOLD = 5.5
-const BLEND = 2.5
+// seconds a reference holds, and seconds it takes to flow into the next one
+const HOLD = 1.8
+const BLEND = 0.85
 
 const VERT = `attribute vec2 p; varying vec2 uv; void main(){ uv = p; gl_Position = vec4(p, 0.0, 1.0); }`
 

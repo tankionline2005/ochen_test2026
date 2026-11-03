@@ -1,107 +1,184 @@
-import { ExternalLink, Github, Moon, Send, Smartphone } from 'lucide-react'
-import { useState } from 'react'
+import { ArrowRight, Boxes, Download, ExternalLink, Github, Layers, Moon, Palette, Send, ShieldCheck, Sparkles, Wand2 } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { Switch } from '../components/Controls'
 import { REPO, TELEGRAM } from '../components/Credits'
-import { InstallSheet } from '../components/InstallSheet'
 import { Page } from '../components/Page'
-import { Logo } from '../components/TopBar'
-import { usePwaInstall } from '../hooks/usePwa'
+import { useWide } from '../hooks/useMedia'
 import { t } from '../lib/strings'
 import { setTheme, useTheme } from '../lib/theme'
 
-/** Who made it and for whom; how it works in a few lines; the theme switch for phones (desktop has it in the top bar). */
-export function About() {
+/**
+ * Who made it, for whom, and how it works — for the reviewer who opens the link first. The step-by-step
+ * presentation of the work will get its own page later.
+ */
+export function About({ onOpenEditor }: { onOpenEditor: () => void }) {
   const theme = useTheme()
-  const pwa = usePwaInstall()
-  const [installing, setInstalling] = useState(false)
+  const wide = useWide()
   return (
     <Page title="О проекте">
       <div className="about-hero showcase">
-        <Logo size={56} />
+        <img className="about-hero-pic" src="/about-hero.png" width={112} height={112} alt="Композиция дизайнеров студии: телефон на раскрытой книге" />
         <div className="about-hero-title">Конструктор иллюстраций</div>
         <div className="about-hero-sub">
           Тестовое задание для ООО «Студия Очень» на должность Junior AI Developer.
           <br />
           Выполнил Nikolai Kondakov.
         </div>
-      </div>
-
-      <div className="section">
-        <div className="group">
-          <a className="cell" href={TELEGRAM} target="_blank" rel="noreferrer">
-            <div className="cell-icon" style={{ background: '#2AABEE' }}>
-              <Send size={16} />
-            </div>
-            <div className="cell-main">Telegram</div>
-            <span className="cell-value">@tankionline2005</span>
-            <ExternalLink size={16} color="var(--text-3)" />
-          </a>
-          <a className="cell" href={REPO} target="_blank" rel="noreferrer" style={{ ['--inset' as string]: '57px' }}>
-            <div className="cell-icon" style={{ background: '#24292f' }}>
-              <Github size={16} />
-            </div>
-            <div className="cell-main">Исходный код</div>
-            <span className="cell-value">GitHub</span>
-            <ExternalLink size={16} color="var(--text-3)" />
-          </a>
+        <div className="hero-stats about-stats">
+          <Stat value="40" label="объектов из Figma" />
+          <Stat value="16" label="кадров дизайнеров изучено" />
+          <Stat value="3" label="формата и 3 схемы" />
+          <Stat value="0" label="сгенерированных объектов" />
         </div>
       </div>
 
-      <div className="section">
-        <div className="section-header">Что умеет</div>
-        <div className="group">
-          <div className="cell text-cell">
-            Собирает иллюстрацию из объектов исходной библиотеки — по метафоре или заголовку (объекты подбирает ИИ) или по
-            названиям объектов. Объекты не перерисовываются и не генерируются: каждый копируется из исходного SVG как есть,
-            меняются только место, поворот, порядок слоёв, роль (главный или фоновый) и цвета внутри палитры.
-          </div>
-          <div className="cell text-cell">
-            Три формата из примеров дизайнеров, два размера объектов, три цветовые схемы и свои палитры с автоматической
-            перекраской. Результат скачивается в SVG: вектор, каждый объект — отдельная именованная группа.
-          </div>
-        </div>
-      </div>
-
-      <div className="section">
-        <div className="section-header">Как устроено</div>
-        <div className="group">
-          <div className="cell text-cell">
-            <b>Библиотека.</b> Скрипт сборки берёт 40 SVG из Figma, заменяет каждый цвет его ролью в палитре и строит маску
-            занятых клеток каждого объекта. Геометрия путей не меняется.
-          </div>
-          <div className="cell text-cell">
-            <b>Раскладка.</b> Правила сняты с 16 кадров дизайнеров: объекты в масштабе 1, главные почти целиком в кадре,
-            фоновые уходят за край, телефон можно положить на книгу, ничего не протыкает друг друга. Поиск — имитация
-            отжига по маскам, в отдельном потоке браузера.
-          </div>
-          <div className="cell text-cell">
-            <b>ИИ.</b> Сервер на FastAPI спрашивает бесплатную модель NVIDIA Nemotron 3.5 Super через OpenRouter, какие
-            объекты передают смысл, и транслирует ход её рассуждений в живой статус. Если модель молчит, объекты подбирает
-            словарь смыслов.
-          </div>
-        </div>
-      </div>
-
-      <div className="section">
-        <div className="group">
-          <div className="cell" style={{ ['--inset' as string]: '57px' }}>
-            <div className="cell-icon" style={{ background: 'var(--indigo)' }}>
-              <Moon size={17} />
+      <div className="about-grid">
+        <div>
+          <div className="section">
+            <div className="group">
+              <button className="cell" onClick={onOpenEditor}>
+                <div className="cell-icon" style={{ background: 'var(--accent)' }}>
+                  <Wand2 size={16} />
+                </div>
+                <div className="cell-main">Открыть конструктор</div>
+                <ArrowRight size={17} color="var(--text-3)" />
+              </button>
+              <a className="cell" href={REPO} target="_blank" rel="noreferrer" style={{ ['--inset' as string]: '57px' }}>
+                <div className="cell-icon" style={{ background: '#24292f' }}>
+                  <Github size={16} />
+                </div>
+                <div className="cell-main">Исходный код</div>
+                <span className="cell-value">GitHub</span>
+                <ExternalLink size={16} color="var(--text-3)" />
+              </a>
+              <a className="cell" href={TELEGRAM} target="_blank" rel="noreferrer" style={{ ['--inset' as string]: '57px' }}>
+                <div className="cell-icon" style={{ background: '#2AABEE' }}>
+                  <Send size={15} />
+                </div>
+                <div className="cell-main">Написать автору</div>
+                <span className="cell-value">@tankionline2005</span>
+                <ExternalLink size={16} color="var(--text-3)" />
+              </a>
             </div>
-            <div className="cell-main">{t.darkTheme}</div>
-            <Switch label={t.darkTheme} on={theme === 'dark'} onChange={(on) => setTheme(on ? 'dark' : 'light')} />
           </div>
-          {pwa.available && (
-            <button className="cell" style={{ ['--inset' as string]: '57px' }} onClick={() => setInstalling(true)}>
-              <div className="cell-icon" style={{ background: 'var(--accent)' }}>
-                <Smartphone size={18} />
+
+          <div className="section">
+            <div className="section-header">Задание</div>
+            <div className="group">
+              <div className="cell text-cell">
+                Сервис, который собирает иллюстрации из объектов 20 исходных иллюстраций студии в разных форматах — по
+                метафоре или по названиям объектов. Главное ограничение: ничего не генерировать. Объекты не меняются,
+                результат — вектор, цветовая схема не нарушается.
               </div>
-              <div className="cell-main">{t.homeScreen}</div>
-            </button>
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section-header">Как это работает</div>
+            <div className="group">
+              <Step icon={Sparkles} color="var(--indigo)" title="Смысл → объекты">
+                ИИ читает метафору и выбирает 1–3 главных и 0–2 фоновых объекта из десяти. Он только выбирает — рисовать ему
+                нечего. Названия объектов распознаются и без ИИ.
+              </Step>
+              <Step icon={Layers} color="var(--orange)" title="Раскладка">
+                Движок расставляет объекты по правилам, снятым с кадров дизайнеров, и проверяет их по маскам настоящих
+                силуэтов: ничего не налезает, телефон можно положить на книгу, фон уходит за край.
+              </Step>
+              <Step icon={Palette} color="var(--red)" title="Палитра">
+                Каждый цвет объекта хранится как роль: фон светлый, средний, тёмный, три цвета объектов, контур, белый.
+                Перекраска — подстановка ролей, поэтому любая схема ложится без новых файлов.
+              </Step>
+              <Step icon={Download} color="var(--green)" title="SVG">
+                Результат скачивается вектором: каждый объект — отдельная группа с именем, в Figma он открывается слоями.
+              </Step>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="section">
+            <div className="section-header">Что было интересно</div>
+            <div className="group">
+              <div className="cell text-cell">
+                <b>Правила из кадров дизайнеров.</b> Я нашёл в «Примерах композиций» те же контуры, что в библиотеке, и
+                восстановил точные координаты объектов во всех 16 кадрах. Оказалось, объекты стоят в масштабе 1 — крупно и
+                с выходом за край. Кадры самих дизайнеров по этим правилам получают лишь небольшой штраф — значит, правила
+                описывают их стиль, а не мой вкус.
+              </div>
+              <div className="cell text-cell">
+                <b>Живой статус.</b> Сервер получает ответ модели потоком и пересылает её рассуждения в браузер — поверх сферы
+                видно, о чём она думает прямо сейчас, а не крутящийся индикатор.
+              </div>
+              <div className="cell text-cell">
+                <b>Запасной путь.</b> Бесплатная модель бывает медленной или перегруженной. Если она не ответит, объекты
+                подберёт словарь смыслов, и интерфейс скажет об этом честно.
+              </div>
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section-header">Стек и инструменты</div>
+            <div className="group">
+              <Tech icon={Boxes} name="React 19, TypeScript, Vite" note="интерфейс в стиле iOS на телефоне, широкий редактор на компьютере" />
+              <Tech icon={Layers} name="Раскладка в Web Worker" note="имитация отжига по маскам объектов, 0,3–0,6 с" />
+              <Tech icon={Sparkles} name="NVIDIA Nemotron 3.5 Super" note="бесплатная модель через OpenRouter, строгий JSON" />
+              <Tech icon={ShieldCheck} name="FastAPI, nginx, Cloudflare" note="сайт открыт только через Cloudflare, лимиты на запросы" />
+              <Tech icon={Wand2} name="Claude Code" note="разработка: Claude Opus 5.5" />
+            </div>
+          </div>
+
+          {!wide && (
+            <div className="section">
+              <div className="group">
+                <div className="cell" style={{ ['--inset' as string]: '57px' }}>
+                  <div className="cell-icon" style={{ background: 'var(--indigo)' }}>
+                    <Moon size={17} />
+                  </div>
+                  <div className="cell-main">{t.darkTheme}</div>
+                  <Switch label={t.darkTheme} on={theme === 'dark'} onChange={(on) => setTheme(on ? 'dark' : 'light')} />
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>
-      {pwa.available && <InstallSheet open={installing} onClose={() => setInstalling(false)} />}
     </Page>
+  )
+}
+
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="hero-stat">
+      <div className="hero-stat-value">{value}</div>
+      <div className="hero-stat-label">{label}</div>
+    </div>
+  )
+}
+
+function Step({ icon: Icon, color, title, children }: { icon: LucideIcon; color: string; title: string; children: React.ReactNode }) {
+  return (
+    <div className="cell step-cell" style={{ ['--inset' as string]: '57px' }}>
+      <div className="cell-icon" style={{ background: color }}>
+        <Icon size={16} />
+      </div>
+      <div className="cell-main">
+        <div className="step-title">{title}</div>
+        <div className="step-text">{children}</div>
+      </div>
+    </div>
+  )
+}
+
+function Tech({ icon: Icon, name, note }: { icon: LucideIcon; name: string; note: string }) {
+  return (
+    <div className="cell" style={{ ['--inset' as string]: '57px' }}>
+      <div className="cell-icon" style={{ background: 'var(--text-2)' }}>
+        <Icon size={16} />
+      </div>
+      <div className="cell-main">
+        <div>{name}</div>
+        <div className="cell-sub wrap">{note}</div>
+      </div>
+    </div>
   )
 }

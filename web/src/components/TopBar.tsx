@@ -12,8 +12,7 @@ export function TopBar({ active, onSelect }: { active: Tab; onSelect: (tab: Tab)
   return (
     <header className="topbar">
       <div className="topbar-brand">
-        <Logo />
-        {APP_NAME}
+        <img className="wordmark" src="/snapbuild-logo.png" width={138} height={20} alt={`снэпбилд — ${APP_NAME}`} />
       </div>
       <nav className="topbar-nav">
         {TABS.map(({ id, label, icon: Icon }, i) => {

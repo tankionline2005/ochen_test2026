@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react'
 import { composeStream, type ComposeEvent } from '../api'
 import { loadBodies, objectById, type Size } from '../engine/library'
-import { type Pick, suggestSize } from '../engine/layout'
+import type { Pick } from '../engine/layout'
 import { matchMeaning, parseNames } from '../engine/match'
 import { randomSeed, runLayout } from '../engine/runLayout'
 import type { Item, Scene } from '../engine/scene'
@@ -116,7 +116,7 @@ export async function compose(opts: {
   mode: 'meaning' | 'names'
   text: string
   scene: Scene
-  size: Size | 'auto'
+  size: Size
 }): Promise<{ scene: Scene; outcome: ComposeOutcome } | null> {
   const { mode, text, scene } = opts
   controller?.abort()
@@ -215,7 +215,7 @@ export async function compose(opts: {
     }
 
     if (controller.signal.aborted) return null
-    const size: Size = opts.size === 'auto' ? suggestSize(picks, scene.format) : opts.size
+    const size = opts.size
 
     stage('layout', 'active')
     set({ live: `${picks.length} ${picks.length === 1 ? 'объект' : picks.length < 5 ? 'объекта' : 'объектов'} — ищу равновесие в кадре ${scene.format.w}×${scene.format.h}` })

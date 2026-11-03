@@ -31,13 +31,7 @@ export function Palettes() {
   return (
     <Page
       title="Палитры"
-      titleCount={all.length}
       onHelp={() => openIntro('palettes')}
-      right={
-        <button className="nav-button" onClick={() => setEditing(blank())} aria-label="Новая палитра">
-          <Plus size={26} />
-        </button>
-      }
     >
       <div className="section">
         <div className="section-header">Схемы</div>

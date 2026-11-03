@@ -14,7 +14,7 @@ import {
 import { useEffect, useMemo, useState } from 'react'
 import { Switch } from '../components/Controls'
 import { Chips, Segmented } from '../components/Segmented'
-import { useWheelScrollX } from '../hooks/useWheelScrollX'
+import { ScrollRow } from '../components/ScrollRow'
 import { useStored, useStoredJson } from '../hooks/useStored'
 import { type Bodies, loadBodies, objectById, OBJECTS, type Palette, type Size, type State } from '../engine/library'
 import { FORMATS, paint, type Scene, TINTS } from '../engine/scene'
@@ -34,8 +34,6 @@ export function useBodies(size: Size): Bodies | null {
   return bodies?.size === size ? bodies.b : null
 }
 
-export type SizeMode = Size | 'auto'
-export const useSizeMode = () => useStored<SizeMode>('sizeMode', 'auto', ['auto', 'large', 'small'])
 
 export const PROMPT_EXAMPLES = {
   meaning: ['Финансовая грамотность для начинающих', 'Командная работа над проектом', 'Подкаст для тех, кто учится по вечерам', 'Как безопасно платить онлайн'],
@@ -46,7 +44,6 @@ export const PROMPT_EXAMPLES = {
 export function PromptPanel({ onCompose, busy }: { onCompose: (mode: 'meaning' | 'names', text: string) => void; busy: boolean }) {
   const [mode, setMode] = useStored<'meaning' | 'names'>('promptMode', 'meaning', ['meaning', 'names'])
   const [text, setText] = useStoredJson('promptText', '')
-  const chips = useWheelScrollX()
   const go = () => text.trim() && onCompose(mode, text.trim())
   return (
     <div className="section prompt">
@@ -71,27 +68,20 @@ export function PromptPanel({ onCompose, busy }: { onCompose: (mode: 'meaning' |
           }}
         />
       </div>
-      <div className="prompt-examples" ref={chips}>
+      <ScrollRow className="prompt-examples">
         {PROMPT_EXAMPLES[mode].map((ex) => (
           <button key={ex} className="example-chip" onClick={() => setText(ex)}>
             {ex}
           </button>
         ))}
-      </div>
+      </ScrollRow>
       <button className="button" disabled={!text.trim() || busy} onClick={go}>
         {mode === 'meaning' ? <Sparkles size={19} /> : <Wand2 size={19} />}
         Собрать композицию
       </button>
-      <div className="section-footer">
-        {mode === 'meaning' ? (
-          <>
-            Объекты подбирает ИИ — бесплатная модель NVIDIA Nemotron 3.5 Super через OpenRouter. Ответ занимает от пары секунд
-            до минуты: это ограничение бесплатного тарифа. Если модель не ответит, объекты подберёт словарь смыслов.
-          </>
-        ) : (
-          <>Можно писать в любом падеже и добавлять «фоном», чтобы объект стал фоновым, и числа: «две монеты».</>
-        )}
-      </div>
+      {mode === 'names' && (
+        <div className="section-footer">Можно писать в любом падеже, добавлять «фоном», чтобы объект стал фоновым, и числа: «две монеты».</div>
+      )}
     </div>
   )
 }
@@ -126,9 +116,8 @@ export function AiNoteCard({ note, onClose }: { note: AiNote; onClose: () => voi
 }
 
 /** Format, detail size, background decor. */
-export function SceneSettings({ onFormat, onSize }: { onFormat: (id: Scene['format']['id']) => void; onSize: (s: SizeMode) => void }) {
+export function SceneSettings({ onFormat, onSize }: { onFormat: (id: Scene['format']['id']) => void; onSize: (s: Size) => void }) {
   const { scene, patch } = useEditor()
-  const [sizeMode] = useSizeMode()
   return (
     <div className="section">
       <div className="section-header">Кадр</div>
@@ -146,10 +135,9 @@ export function SceneSettings({ onFormat, onSize }: { onFormat: (id: Scene['form
           <div className="cell-title-sm">Размер объектов</div>
           <Segmented
             id="size"
-            value={sizeMode}
+            value={scene.size}
             onChange={onSize}
             options={[
-              { value: 'auto', label: 'Авто' },
               { value: 'large', label: 'Крупный' },
               { value: 'small', label: 'Мелкий' },
             ]}
@@ -161,8 +149,8 @@ export function SceneSettings({ onFormat, onSize }: { onFormat: (id: Scene['form
         </div>
       </div>
       <div className="section-footer">
-        Крупный набор — детальные объекты крупным планом, мелкий — упрощённые, чтобы в кадр вошло больше. Сейчас:{' '}
-        {scene.size === 'large' ? 'крупный' : 'мелкий'}. Смена формата или размера пересобирает раскладку.
+        Крупный набор — детальные объекты крупным планом, мелкий — упрощённые, чтобы в кадр вошло больше. Смена формата
+        или размера пересобирает раскладку.
       </div>
     </div>
   )

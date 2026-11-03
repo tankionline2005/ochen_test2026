@@ -27,7 +27,6 @@ export function Library({ onAdded }: { onAdded: () => void }) {
   return (
     <Page
       title="Библиотека"
-      titleCount={OBJECTS.length}
       onHelp={() => openIntro('library')}
       accessory={
         <div className="accessory">
