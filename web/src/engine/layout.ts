@@ -254,8 +254,21 @@ function score(bodies: Body[], pos: Pos[], fw: number, fh: number, parts?: Score
         const mainEnd = pos[main].y + bodies[main].g.y1
         const bgEnd = pos[bg].y + bodies[bg].g.y1
         if (mainEnd < bgEnd) add('depth', (o / bodies[main].g.filled) * 20 + 0.3)
+        // a main object over much of a background one reads as standing on it (a wallet on the lamp's base);
+        // only a book or a folder may carry things, and that case was let through above
+        const onTop = o / bodies[main].g.filled
+        if (onTop > 0.12) add('standsOnBg', (onTop - 0.12) * 8)
       }
     }
+
+  // the main objects form one group: their centres keep close to the group's centre
+  if (mains.length > 1) {
+    const centres = mains.map((i) => ({ x: pos[i].x + (bodies[i].g.x0 + bodies[i].g.x1) / 2, y: pos[i].y + (bodies[i].g.y0 + bodies[i].g.y1) / 2 }))
+    const cx = centres.reduce((s, c) => s + c.x, 0) / centres.length
+    const cy = centres.reduce((s, c) => s + c.y, 0) / centres.length
+    const spread = centres.reduce((s, c) => s + Math.hypot(c.x - cx, c.y - cy), 0) / centres.length / minSide
+    if (spread > 0.26) add('scattered', (spread - 0.26) * 6)
+  }
 
   // main objects stay together; the more of them, the tighter the group, or a big set looks scattered
   if (mains.length > 1) {
