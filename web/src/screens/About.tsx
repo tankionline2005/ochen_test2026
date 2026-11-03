@@ -24,12 +24,6 @@ export function About({ onOpenEditor }: { onOpenEditor: () => void }) {
           <br />
           Выполнил Nikolai Kondakov.
         </div>
-        <div className="hero-stats about-stats">
-          <Stat value="40" label="объектов из Figma" />
-          <Stat value="16" label="кадров дизайнеров изучено" />
-          <Stat value="3" label="формата и 3 схемы" />
-          <Stat value="0" label="сгенерированных объектов" />
-        </div>
       </div>
 
       <div className="about-grid">
@@ -55,7 +49,7 @@ export function About({ onOpenEditor }: { onOpenEditor: () => void }) {
                 <div className="cell-icon" style={{ background: '#2AABEE' }}>
                   <Send size={15} />
                 </div>
-                <div className="cell-main">Написать автору</div>
+                <div className="cell-main">Автор</div>
                 <span className="cell-value">@tankionline2005</span>
                 <ExternalLink size={16} color="var(--text-3)" />
               </a>
@@ -143,15 +137,6 @@ export function About({ onOpenEditor }: { onOpenEditor: () => void }) {
         </div>
       </div>
     </Page>
-  )
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="hero-stat">
-      <div className="hero-stat-value">{value}</div>
-      <div className="hero-stat-label">{label}</div>
-    </div>
   )
 }
 

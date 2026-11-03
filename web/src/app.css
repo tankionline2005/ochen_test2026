@@ -1008,16 +1008,6 @@ textarea.field.prompt-field {
   margin-bottom: 6px;
 }
 
-.about-stats {
-  margin-top: 14px;
-  width: min(100%, 560px);
-}
-
-.about-stats .hero-stat-label {
-  font-size: 12px;
-  line-height: 1.25;
-}
-
 .app.wide .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
